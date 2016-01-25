@@ -31,7 +31,44 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		templateUrl: 'templates/menu.html',
 		controller: 'AppCtrl'
 	})
-
+	
+	.state('app.chats', {
+		url: '/chats',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/chats.html'
+			}
+		}
+	})
+	
+	.state('app.contacts', {
+		url: '/contacts',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/contacts.html'
+			}
+		}
+	})
+	
+	.state('app.groups', {
+		url: '/groups',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/groups.html'
+			}
+		}
+	})
+	
+	.state('app.settings', {
+		url: '/settings',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/settings.html'
+			}
+		}
+	})
+	
+	// Old routes methods
 	.state('app.search', {
 		url: '/search',
 		views: {
@@ -69,6 +106,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 			}
 		}
 	});
+	// Old routes methods
+	
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/playlists');
 });
