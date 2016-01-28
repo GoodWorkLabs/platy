@@ -32,15 +32,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		controller: 'AppCtrl'
 	})
 	
-	.state('app.chats', {
-		url: '/chats',
-		views: {
-			'menuContent': {
-				templateUrl: 'templates/chats.html'
-			}
-		}
-	})
-	
 	.state('app.contacts', {
 		url: '/contacts',
 		views: {
@@ -69,45 +60,38 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 	})
 	
 	// Old routes methods
-	.state('app.search', {
-		url: '/search',
+	.state('app.chats', {
+		url: '/chats',
 		views: {
 			'menuContent': {
-				templateUrl: 'templates/search.html'
+				templateUrl: 'templates/chats.html',
+				controller: 'ChatsCtrl'
 			}
-		}
-	})
-
-	.state('app.browse', {
-		url: '/browse',
-		views: {
-			'menuContent': {
-				templateUrl: 'templates/browse.html'
-			}
-		}
-	})
-	
-	.state('app.playlists', {
-		url: '/playlists',
-		views: {
-			'menuContent': {
-				templateUrl: 'templates/playlists.html',
-				controller: 'PlaylistsCtrl'
+		},
+		resolve: {
+			chats: function(ChatsService) {
+				return ChatsService.getChats();
 			}
 		}
 	})
 
 	.state('app.single', {
-		url: '/playlists/:playlistId',
+		url: '/chats/:chatId',
 		views: {
 			'menuContent': {
-				templateUrl: 'templates/playlist.html',
-				controller: 'PlaylistCtrl'
+				templateUrl: 'templates/chat.html',
+				controller: 'ChatCtrl'
+			}
+		},
+		resolve: {
+			chat: function($stateParams, ChatsService) {
+				return ChatsService.getChat($stateParams.chatId);
 			}
 		}
 	});
 	// Old routes methods
 	
 	// if none of the above states are matched, use this as the fallback
-	$urlRouterProvider.otherwise('/app/playlists');
+	$urlRouterProvider.otherwise('/app/chats');
 });
+

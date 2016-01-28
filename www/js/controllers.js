@@ -41,16 +41,62 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+// .controller('ChatsCtrl', function($scope) {
+//   $scope.chats = [
+//     { id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
+//     { id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
+//     { id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
+//     { id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
+//     { id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
+//     { id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
+//   ];
+// })
+
+// .controller('ChatsCtrl', function($scope, $stateParams) {
+// 	$scope.data = {
+// 		showDelete: true,
+// 		showReorder: true
+// 	};
+//
+//     $scope.chats = [
+//       { id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
+//       { id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
+//       { id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
+//       { id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
+//       { id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
+//       { id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
+//     ];
+// });
+
+.service('ChatsService', function($q) {
+	return {
+		chats: [
+			{ id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
+			{ id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
+			{ id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
+			{ id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
+			{ id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
+			{ id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
+		],
+		getChats: function() {
+			return this.chats
+		},
+		getChat: function(chatId) {
+			var res = ''
+			this.chats.forEach(function(chat) {
+				if (chat.id == chatId) { 
+					res = chat;
+				}
+			})
+			return res; 
+		}
+	}
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+.controller('ChatsCtrl', function($scope, ChatsService, $stateParams) {
+	$scope.chats = ChatsService.getChats();
+})
+
+.controller('ChatCtrl', function($scope, ChatsService, $stateParams) {
+	$scope.chat = ChatsService.getChat($stateParams.chatId);
+})

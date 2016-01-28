@@ -1,5 +1,9 @@
 <ion-view view-title="Chats">
   <ion-content>
-    <h1>Chats</h1>
+    <ion-list>
+      <ion-item ng-repeat="chat in chats" href="#/app/chats/{{chat.id}}">
+        {{chat.username}}
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
