@@ -41,32 +41,27 @@ angular.module('starter.controllers', [])
   };
 })
 
-// .controller('ChatsCtrl', function($scope) {
-//   $scope.chats = [
-//     { id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
-//     { id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
-//     { id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
-//     { id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
-//     { id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
-//     { id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
-//   ];
-// })
-
-// .controller('ChatsCtrl', function($scope, $stateParams) {
-// 	$scope.data = {
-// 		showDelete: true,
-// 		showReorder: true
-// 	};
-//
-//     $scope.chats = [
-//       { id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
-//       { id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
-//       { id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
-//       { id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
-//       { id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
-//       { id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
-//     ];
-// });
+.service('MessagesService', function($q) {
+	return {
+		messages: [
+			{ id: 1, chat_id: 1, content: 'Wow, this is really something huh', sender_id: 10 },
+			{ id: 2, chat_id: 1, content: 'Ykj jdjsad asdhsadj asds', sender_id: 1 },
+			{ id: 3, chat_id: 1, content: 'Hkjkjk kjd asdkj ;)', sender_id: 10 },
+			{ id: 4, chat_id: 1, content: 'Dds df dsf dsf dsf sdsds', sender_id: 10 },
+			{ id: 5, chat_id: 1, content: 'Ujhj jahsd asjdhasd asd.', sender_id: 1 },
+			{ id: 6, chat_id: 1, content: 'Lasdsa asdsad :)', sender_id: 1 },
+			{ id: 7, chat_id: 2, content: 'Wow, this is really something huh', sender_id: 10 },
+			{ id: 8, chat_id: 2, content: 'Ykj jdjsad asdhsadj asds', sender_id: 1 },
+			{ id: 9, chat_id: 2, content: 'Hkjkjk kjd asdkj ;)', sender_id: 10 },
+			{ id: 10, chat_id: 2, content: 'Dds df dsf dsf dsf sdsds', sender_id: 10 },
+			{ id: 11, chat_id: 2, content: 'Ujhj jahsd asjdhasd asd.', sender_id: 1 },
+			{ id: 12, chat_id: 2, content: 'Lasdsa asdsad :)', sender_id: 10 }
+		],
+		getMessages: function() {
+			return this.messages
+		}
+	}
+})
 
 .service('ChatsService', function($q) {
 	return {
@@ -97,6 +92,7 @@ angular.module('starter.controllers', [])
 	$scope.chats = ChatsService.getChats();
 })
 
-.controller('ChatCtrl', function($scope, ChatsService, $stateParams) {
+.controller('ChatCtrl', function($scope, ChatsService, MessagesService, $stateParams) {
 	$scope.chat = ChatsService.getChat($stateParams.chatId);
+	$scope.messages = MessagesService.getMessages();
 })
