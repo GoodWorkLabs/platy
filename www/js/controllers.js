@@ -41,21 +41,48 @@ angular.module('starter.controllers', [])
   };
 })
 
+.service('ContactsService', function($q) {
+	return {
+		contacts: [
+			{ id: 1, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Rajib', last_name: 'Chowdhury', username: 'Rajib Chowdhury', email: 'rajib@goodworklabs.com', phone: '9836157098'},
+			{ id: 2, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Palash', last_name: 'Sinha', username: 'Palash Sinha', email: 'palash@goodworklabs.com', phone: '9836157098'},
+			{ id: 3, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Bodhi', last_name: 'Bhattacharya', username: 'Bodhi Bhattacharya', email: 'bodhi@goodworklabs.com', phone: '9836157098'},
+			{ id: 4, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Madhumita', last_name: 'Chatterjee', username: 'Madhumita Chatterjee', email: 'madhumita@goodworklabs.com', phone: '9836157098'},
+			{ id: 5, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Paridhi', last_name: 'Gupta', username: 'Paridhi Gupta', email: 'paridhi@goodworklabs.com', phone: '9836157098'},
+			{ id: 6, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Tapash', last_name: 'Mullick', username: 'Tapash Mullick', email: 'tapash@goodworklabs.com', phone: '9836157098'},
+			{ id: 7, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Ujjal', last_name: 'Bhattacharya', username: 'Ujjal Bhattacharya', email: 'ujjal@goodworklabs.com', phone: '9836157098'},
+			{ id: 8, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Bimal', last_name: 'Singh', username: 'Bimal Singh', email: 'bimal@goodworklabs.com', phone: '9836157098'}
+		],
+		getContacts: function() {
+			return this.contacts
+		},
+		getContact: function(contactId) {
+			var res = ''
+			this.contacts.forEach(function(contact) {
+				if (contact.id == contactId) { 
+					res = contact;
+				}
+			})
+			return res; 
+		}
+	}
+})
+
 .service('MessagesService', function($q) {
 	return {
 		messages: [
-			{ id: 1, chat_id: 1, content: 'Wow, this is really something huh', sender_id: 10 },
-			{ id: 2, chat_id: 1, content: 'Ykj jdjsad asdhsadj asds', sender_id: 1 },
-			{ id: 3, chat_id: 1, content: 'Hkjkjk kjd asdkj ;)', sender_id: 10 },
-			{ id: 4, chat_id: 1, content: 'Dds df dsf dsf dsf sdsds', sender_id: 10 },
-			{ id: 5, chat_id: 1, content: 'Ujhj jahsd asjdhasd asd.', sender_id: 1 },
-			{ id: 6, chat_id: 1, content: 'Lasdsa asdsad :)', sender_id: 1 },
-			{ id: 7, chat_id: 2, content: 'Wow, this is really something huh', sender_id: 10 },
-			{ id: 8, chat_id: 2, content: 'Ykj jdjsad asdhsadj asds', sender_id: 1 },
-			{ id: 9, chat_id: 2, content: 'Hkjkjk kjd asdkj ;)', sender_id: 10 },
-			{ id: 10, chat_id: 2, content: 'Dds df dsf dsf dsf sdsds', sender_id: 10 },
-			{ id: 11, chat_id: 2, content: 'Ujhj jahsd asjdhasd asd.', sender_id: 1 },
-			{ id: 12, chat_id: 2, content: 'Lasdsa asdsad :)', sender_id: 10 }
+			{ id: 1, chat_id: 1, content: 'Wow, this is really something huh', user_id: 10 },
+			{ id: 2, chat_id: 1, content: 'Ykj jdjsad asdhsadj asds', user_id: 1 },
+			{ id: 3, chat_id: 1, content: 'Hkjkjk kjd asdkj ;)', user_id: 10 },
+			{ id: 4, chat_id: 1, content: 'Dds df dsf dsf dsf sdsds', user_id: 10 },
+			{ id: 5, chat_id: 1, content: 'Ujhj jahsd asjdhasd asd.', user_id: 1 },
+			{ id: 6, chat_id: 1, content: 'Lasdsa asdsad :)', user_id: 1 },
+			{ id: 7, chat_id: 2, content: 'Wow, this is really something huh', user_id: 10 },
+			{ id: 8, chat_id: 2, content: 'Ykj jdjsad asdhsadj asds', user_id: 1 },
+			{ id: 9, chat_id: 2, content: 'Hkjkjk kjd asdkj ;)', user_id: 10 },
+			{ id: 10, chat_id: 2, content: 'Dds df dsf dsf dsf sdsds', user_id: 10 },
+			{ id: 11, chat_id: 2, content: 'Ujhj jahsd asjdhasd asd.', user_id: 1 },
+			{ id: 12, chat_id: 2, content: 'Lasdsa asdsad :)', user_id: 10 }
 		],
 		getMessages: function() {
 			return this.messages
@@ -66,12 +93,12 @@ angular.module('starter.controllers', [])
 .service('ChatsService', function($q) {
 	return {
 		chats: [
-			{ id: 1, username: 'Reggae Chat', last_message: 'Dds df dsf dsf dsf sdsds...' },
-			{ id: 2, username: 'Chill Chat', last_message: 'Hkjkjk kjd asdkj...' },
-			{ id: 3, username: 'Dubstep Chat', last_message: 'Ykj jdjsad asdhsadj asds...' },
-			{ id: 4, username: 'Indie Chat', last_message: 'Ujhj jahsd asjdhasd asd...' },
-			{ id: 5, username: 'Rap Chat', last_message: 'Lasdsa asdsad...' },
-			{ id: 6, username: 'Cowbell Chat', last_message: 'Sssa asf asfsa asf asdsaasf...' }
+			{ id: 1, username: 'Rajib Chowdhury', last_message: 'Dds df dsf dsf dsf sdsds...' },
+			{ id: 2, username: 'Palash Sinha', last_message: 'Hkjkjk kjd asdkj...' },
+			{ id: 3, username: 'Bodhi Bhattacharya', last_message: 'Ykj jdjsad asdhsadj asds...' },
+			{ id: 4, username: 'Madhumita Chatterjee', last_message: 'Ujhj jahsd asjdhasd asd...' },
+			{ id: 5, username: 'Paridhi Gupta', last_message: 'Lasdsa asdsad...' },
+			{ id: 6, username: 'Tapash Mullick', last_message: 'Sssa asf asfsa asf asdsaasf...' }
 		],
 		getChats: function() {
 			return this.chats
@@ -95,4 +122,12 @@ angular.module('starter.controllers', [])
 .controller('ChatCtrl', function($scope, ChatsService, MessagesService, $stateParams) {
 	$scope.chat = ChatsService.getChat($stateParams.chatId);
 	$scope.messages = MessagesService.getMessages();
+})
+
+.controller('ContactsCtrl', function($scope, ContactsService, $stateParams) {
+	$scope.contacts = ContactsService.getContacts();
+})
+
+.controller('ContactCtrl', function($scope, ContactsService, $stateParams) {
+	$scope.contact = ContactsService.getContact($stateParams.contactId);
 })

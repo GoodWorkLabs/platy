@@ -36,9 +36,26 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		url: '/contacts',
 		views: {
 			'menuContent': {
-				templateUrl: 'templates/contacts.html'
+				templateUrl: 'templates/contacts.html',
+				controller: 'ContactsCtrl'
 			}
 		}
+	})
+	
+	.state('app.contact', {
+		url: '/contacts/:contactId',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/contact.html',
+				controller: 'ContactCtrl'
+			}
+		}
+		// ,
+		// resolve: {
+		// 	contact: function($stateParams, ContactsService) {
+		// 		return ContactsService.getChat($stateParams.contactId);
+		// 	}
+		// }
 	})
 	
 	.state('app.groups', {
