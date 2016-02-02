@@ -4,6 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
+angular.module("starter", ["ionic", 'firebase'])
 angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function($ionicPlatform) {
@@ -78,25 +79,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 				templateUrl: 'templates/chats.html',
 				controller: 'ChatsCtrl'
 			}
-		},
-		resolve: {
-			chats: function(ChatsService) {
-				return ChatsService.getChats();
-			}
 		}
 	})
 
-	.state('app.single', {
+	.state('app.chat', {
 		url: '/chats/:chatId',
 		views: {
 			'menuContent': {
 				templateUrl: 'templates/chat.html',
 				controller: 'ChatCtrl'
-			}
-		},
-		resolve: {
-			chat: function($stateParams, ChatsService) {
-				return ChatsService.getChat($stateParams.chatId);
 			}
 		}
 	});

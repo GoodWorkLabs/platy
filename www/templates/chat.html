@@ -1,10 +1,12 @@
 <ion-view view-title="{{chat.username}}">
 	<ion-content class="padding" start-y="120">
+	
 		<ol class="messages">
 			<li ng-repeat="message in messages">
-				<p  ng-bind-html="message.content"></p>
+				<p ng-bind-html="message.content"></p>
 			</li>
 		</ol>
+		
 	</ion-content>
 	<ion-footer-bar class="bar-frosted">
 		<label class="item item-input" style="width: 100%;padding-top: 20px;border: none;">
@@ -14,3 +16,5 @@
 		<button class="button button-clear button-positive" ng-click="">Send</button>
 	</ion-footer-bar>
 </ion-view>
+
+
