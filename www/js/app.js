@@ -50,12 +50,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 				controller: 'ContactCtrl'
 			}
 		}
-		// ,
-		// resolve: {
-		// 	contact: function($stateParams, ContactsService) {
-		// 		return ContactsService.getChat($stateParams.contactId);
-		// 	}
-		// }
 	})
 	
 	.state('app.groups', {
