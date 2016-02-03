@@ -7,6 +7,8 @@ angular.module('starter.controllers', [])
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   $scope.$on('$ionicView.enter', function(e) {
+	 
+	localStorage.setItem("current_user_id", 7);  
 	  
   	// var ref = new Firebase("https://platy.firebaseio.com/");
   	// ref.authWithCustomToken('6VsS1l7cEQA9zLoi8tqM6b46aallaHQBrWHyerLj', function(error, authData) {
@@ -120,6 +122,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatCtrl', function($scope, ChatsService, $stateParams) {
+	$scope.current_user_id = localStorage.getItem("current_user_id");
 	$scope.chat = ChatsService.getChat($stateParams.chatId);
 	$scope.messages = [];
 	
@@ -141,6 +144,9 @@ angular.module('starter.controllers', [])
   		}
   	});
 	//
+	
+	// $scope.methodName = function(attr) {
+	// }
 })
 
 .controller('ContactsCtrl', function($scope, ContactsService, $stateParams) {
