@@ -5,7 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module("starter", ["ionic", 'firebase'])
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

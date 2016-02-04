@@ -7,27 +7,7 @@ angular.module('starter.controllers', [])
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   $scope.$on('$ionicView.enter', function(e) {
-	 
 	localStorage.setItem("current_user_id", 7);  
-	  
-  	// var ref = new Firebase("https://platy.firebaseio.com/");
-  	// ref.authWithCustomToken('6VsS1l7cEQA9zLoi8tqM6b46aallaHQBrWHyerLj', function(error, authData) {
-  	// 	if (error) {
-  	// 		console.log("Login Failed to Firebase!", error);
-  	// 	}
-  	// 	else
-  	// 	{
-  	// 		ref.once("value", function(snapshot) {
-  	// 			// $scope.firebase_chats_response = $firebaseObject(ref);
-  	// 				console.log(Object.keys(snapshot.val().chats));
-  	// 			console.log(snapshot.val().chats);
-  	//
-  	// 		}, function (errorObject) {
-  	// 			console.log("Error reading Chats: " + errorObject.code);
-  	// 		});
-  	// 	}
-  	// });
-	  
   });
 
   // Form data for the login modal
@@ -121,7 +101,7 @@ angular.module('starter.controllers', [])
 	$scope.chats = ChatsService.getChats();
 })
 
-.controller('ChatCtrl', function($scope, ChatsService, $stateParams) {
+.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, ChatsService, $stateParams) {
 	$scope.current_user_id = localStorage.getItem("current_user_id");
 	$scope.chat = ChatsService.getChat($stateParams.chatId);
 	$scope.messages = [];
@@ -136,7 +116,10 @@ angular.module('starter.controllers', [])
   		{
 			ref.on("value", function(snapshot) {
 				$scope.messages = snapshot.val();
-				$scope.$apply();
+				$scope.$evalAsync();
+				// Update the scroll area and tell the frosted glass to redraw itself
+			    $ionicFrostedDelegate.update();
+			    $ionicScrollDelegate.scrollBottom(true);
 				console.log($scope.messages);
 			}, function (errorObject) {
 				console.log("Error reading Chats: " + errorObject.code);
@@ -145,8 +128,23 @@ angular.module('starter.controllers', [])
   	});
 	//
 	
-	// $scope.methodName = function(attr) {
-	// }
+	$scope.sendMessage = function (message, utc_timestamp) {
+		var message_obj = {
+			'content': message,
+			'timestamp': utc_timestamp,
+			'user_id': $scope.current_user_id
+		}
+		
+		$scope.chatInput =	$scope.initial;
+		// Send this to firebase
+		ref.push(message_obj);	
+		// Code to send message_obj to Firebase
+		
+		// Update the scroll area and tell the frosted glass to redraw itself
+	    $ionicFrostedDelegate.update();
+	    $ionicScrollDelegate.scrollBottom(true);
+	}
+	
 })
 
 .controller('ContactsCtrl', function($scope, ContactsService, $stateParams) {
