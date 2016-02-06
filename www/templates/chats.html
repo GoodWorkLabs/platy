@@ -1,9 +1,9 @@
 <ion-view view-title="Chats">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="chat in chats" href="#/app/chats/{{chat.id}}" class="item-avatar">
+      <ion-item ng-repeat="chat in chats" href="#/app/chats/{{chat.id}}" class="item-avatar" ng-click="setCurrentChat(chat.id, 'http://ionicframework.com/img/docs/venkman.jpg', chat.chat_title, false)">
 	      <img src="http://ionicframework.com/img/docs/venkman.jpg">
-	      <h2>{{chat.username}}</h2>
+	      <h2>{{chat.chat_title}}</h2>
 	      <p>{{chat.last_message}}</p>
       </ion-item>
     </ion-list>

@@ -74,14 +74,7 @@ angular.module('starter.controllers', [])
 
 .service('ChatsService', function($q) {
 	return {
-		chats: [
-			{ id: 1, username: 'Rajib Chowdhury', last_message: 'Dds df dsf dsf dsf sdsds...' },
-			{ id: 2, username: 'Palash Sinha', last_message: 'Hkjkjk kjd asdkj...' },
-			{ id: 3, username: 'Bodhi Bhattacharya', last_message: 'Ykj jdjsad asdhsadj asds...' },
-			{ id: 4, username: 'Madhumita Chatterjee', last_message: 'Ujhj jahsd asjdhasd asd...' },
-			{ id: 5, username: 'Paridhi Gupta', last_message: 'Lasdsa asdsad...' },
-			{ id: 6, username: 'Tapash Mullick', last_message: 'Sssa asf asfsa asf asdsaasf...' }
-		],
+		chats: JSON.parse(localStorage.getItem("ongoing_chats")),
 		getChats: function() {
 			return this.chats
 		},
@@ -99,6 +92,13 @@ angular.module('starter.controllers', [])
 
 .controller('ChatsCtrl', function($scope, ChatsService, $stateParams) {
 	$scope.chats = ChatsService.getChats();
+	
+	$scope.setCurrentChat = function (id, avatar, chat_title, group) {
+		localStorage.setItem("current_chat_id", id);
+		localStorage.setItem("current_chat_avatar", avatar);
+		localStorage.setItem("current_chat_title", chat_title);
+		localStorage.setItem("current_chat_group", group);
+	}
 })
 
 .controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, ChatsService, $stateParams) {
@@ -106,7 +106,13 @@ angular.module('starter.controllers', [])
 	$scope.chat = ChatsService.getChat($stateParams.chatId);
 	$scope.messages = [];
 	
-	// 
+	// Current chat object
+	$scope.current_chat_id = localStorage.getItem("current_chat_id");
+	$scope.current_chat_avatar = localStorage.getItem("current_chat_avatar");
+	$scope.current_chat_title = localStorage.getItem("current_chat_title");
+	$scope.current_chat_group = localStorage.getItem("current_chat_group");
+	
+	// Get message
   	var ref = new Firebase("https://platy.firebaseio.com/chats/" + $stateParams.chatId);
   	ref.authWithCustomToken('6VsS1l7cEQA9zLoi8tqM6b46aallaHQBrWHyerLj', function(error, authData) {
   		if (error) {
@@ -126,25 +132,43 @@ angular.module('starter.controllers', [])
 			});
   		}
   	});
-	//
 	
+	// Send message
 	$scope.sendMessage = function (message, utc_timestamp) {
 		var message_obj = {
 			'content': message,
 			'timestamp': utc_timestamp,
 			'user_id': $scope.current_user_id
 		}
-		
+		// Reset chat input model
 		$scope.chatInput =	$scope.initial;
 		// Send this to firebase
-		ref.push(message_obj);	
-		// Code to send message_obj to Firebase
+		ref.push(message_obj);
 		
 		// Update the scroll area and tell the frosted glass to redraw itself
 	    $ionicFrostedDelegate.update();
 	    $ionicScrollDelegate.scrollBottom(true);
+		
+		// Locally store ongoing chats
+		var message_object_json = {
+			id: $scope.current_chat_id,
+			avatar: $scope.current_chat_avatar,
+			chat_title: $scope.current_chat_title,
+			last_message: message,
+			group: $scope.current_chat_group
+		}
+		
+		if ((localStorage.getItem("ongoing_chats") != null) && (eval(localStorage.getItem("ongoing_chats")).length > 0)) {
+			ongoing_chats_json = JSON.parse(localStorage.getItem("ongoing_chats"));
+			ongoing_chats_json.removeValue('id', $scope.current_chat_id);
+			
+			var outcome = $.merge(ongoing_chats_json, [message_object_json]);
+			localStorage.setItem("ongoing_chats", JSON.stringify(outcome));
+		} else {
+			localStorage.setItem("ongoing_chats", JSON.stringify([message_object_json]));
+		}
+		// Locally store ongoing chats
 	}
-	
 })
 
 .controller('ContactsCtrl', function($scope, ContactsService, $stateParams) {
@@ -154,3 +178,19 @@ angular.module('starter.controllers', [])
 .controller('ContactCtrl', function($scope, ContactsService, $stateParams) {
 	$scope.contact = ContactsService.getContact($stateParams.contactId);
 })
+
+
+//  Remove duplicate entry from JSON array
+//  http://stackoverflow.com/questions/6310623/remove-item-from-json-array-using-its-name-value
+Array.prototype.removeValue = function(name, value){
+	var arr = [];
+
+	$.each(this, function(i, item) {
+		if (item[name] != value) {
+			arr.push(item);
+		}
+	});
+   
+	this.length = 0; //clear original array
+	this.push.apply(this, arr); //push all elements except the one we want to delete
+}

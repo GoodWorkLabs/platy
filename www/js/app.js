@@ -74,6 +74,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
 	
 	// Old routes methods
 	.state('app.chats', {
+		cache: false,
 		url: '/chats',
 		views: {
 			'menuContent': {
