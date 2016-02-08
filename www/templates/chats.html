@@ -6,6 +6,9 @@
 	      <h2>{{chat.chat_title}}</h2>
 	      <p>{{chat.last_message}}</p>
       </ion-item>
+		  <div ng-if="chats.length == 0" class="item item-divider">
+		    No recent Chats
+		  </div>
     </ion-list>
   </ion-content>
 </ion-view>

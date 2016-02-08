@@ -83,7 +83,10 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $stateParams) {
+.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $stateParams, $ionicLoading) {
+	// Show loader
+	$ionicLoading.show({ template: 'Loading...'});
+	
 	$scope.current_user_id = localStorage.getItem("current_user_id");
 	$scope.chats = ((localStorage.getItem("ongoing_chats33") == null) ? [] : localStorage.getItem("ongoing_chats33"));
 	$scope.chat = getChat($stateParams.chatId);
@@ -120,7 +123,8 @@ angular.module('starter.controllers', [])
 				// Update the scroll area and tell the frosted glass to redraw itself
 				$ionicFrostedDelegate.update();
 				$ionicScrollDelegate.scrollBottom(true);
-				console.log($scope.messages);
+				// Hide loader
+				$ionicLoading.hide();
 			}, function (errorObject) {
 				console.log("Error reading Chats: " + errorObject.code);
 			});
@@ -190,7 +194,6 @@ angular.module('starter.controllers', [])
 		$state.go("app.chat", {"chatId": chat_id});
 	}
 })
-
 
 //  Remove duplicate entry from JSON array
 //  http://stackoverflow.com/questions/6310623/remove-item-from-json-array-using-its-name-value
