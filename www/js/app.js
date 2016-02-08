@@ -85,6 +85,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
 	})
 
 	.state('app.chat', {
+		cache: false,
 		url: '/chats/:chatId',
 		views: {
 			'menuContent': {

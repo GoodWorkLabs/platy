@@ -2,47 +2,47 @@ angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  $scope.$on('$ionicView.enter', function(e) {
-	localStorage.setItem("current_user_id", 7);  
-  });
+	// With the new view caching in Ionic, Controllers are only called
+	// when they are recreated or on app start, instead of every page change.
+	// To listen for when this page is active (for example, to refresh data),
+	// listen for the $ionicView.enter event:
+	$scope.$on('$ionicView.enter', function(e) {
+		localStorage.setItem("current_user_id", 7);  
+	});
 
-  // Form data for the login modal
-  $scope.loginData = {};
+	// Form data for the login modal
+	$scope.loginData = {};
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope,
-	focusFirstInput: true,
-	backdropClickToClose: false,
-	hardwareBackButtonClose: false
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+	// Create the login modal that we will use later
+	$ionicModal.fromTemplateUrl('templates/login.html', {
+		scope: $scope,
+		focusFirstInput: true,
+		backdropClickToClose: false,
+		hardwareBackButtonClose: false
+	}).then(function(modal) {
+		$scope.modal = modal;
+	});
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
+	// Triggered in the login modal to close it
+	$scope.closeLogin = function() {
+		$scope.modal.hide();
+	};
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+	// Open the login modal
+	$scope.login = function() {
+		$scope.modal.show();
+	};
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+	// Perform the login action when the user submits the login form
+	$scope.doLogin = function() {
+		console.log('Doing login', $scope.loginData);
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
+		// Simulate a login delay. Remove this and replace with your login
+		// code if using a login system
+		$timeout(function() {
+			$scope.closeLogin();
+		}, 1000);
+	};
 })
 
 .service('ContactsService', function($q) {
@@ -72,26 +72,8 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.service('ChatsService', function($q) {
-	return {
-		chats: JSON.parse(localStorage.getItem("ongoing_chats")),
-		getChats: function() {
-			return this.chats
-		},
-		getChat: function(chatId) {
-			var res = ''
-			this.chats.forEach(function(chat) {
-				if (chat.id == chatId) { 
-					res = chat;
-				}
-			})
-			return res; 
-		}
-	}
-})
-
-.controller('ChatsCtrl', function($scope, ChatsService, $stateParams) {
-	$scope.chats = ChatsService.getChats();
+.controller('ChatsCtrl', function($scope, $stateParams) {
+	$scope.chats = JSON.parse(localStorage.getItem("ongoing_chats"));
 	
 	$scope.setCurrentChat = function (id, avatar, chat_title, group) {
 		localStorage.setItem("current_chat_id", id);
@@ -101,9 +83,10 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, ChatsService, $stateParams) {
+.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $stateParams) {
 	$scope.current_user_id = localStorage.getItem("current_user_id");
-	$scope.chat = ChatsService.getChat($stateParams.chatId);
+	$scope.chats = ((localStorage.getItem("ongoing_chats33") == null) ? [] : localStorage.getItem("ongoing_chats33"));
+	$scope.chat = getChat($stateParams.chatId);
 	$scope.messages = [];
 	
 	// Current chat object
@@ -112,29 +95,40 @@ angular.module('starter.controllers', [])
 	$scope.current_chat_title = localStorage.getItem("current_chat_title");
 	$scope.current_chat_group = localStorage.getItem("current_chat_group");
 	
+	// Get specific chat object
+	function getChat(chatId) {
+		var res = '';
+		$scope.chats.forEach(function(chat) {
+			if (chat.id == chatId) { 
+				res = chat;
+			}
+		})
+		return res;
+	}
+	
 	// Get message
-  	var ref = new Firebase("https://platy.firebaseio.com/chats/" + $stateParams.chatId);
-  	ref.authWithCustomToken('6VsS1l7cEQA9zLoi8tqM6b46aallaHQBrWHyerLj', function(error, authData) {
-  		if (error) {
-  			console.log("Login Failed to Firebase!", error);
-  		}
-  		else
-  		{
+	var ref = new Firebase("https://platy.firebaseio.com/chats/" + $stateParams.chatId);
+	ref.authWithCustomToken('6VsS1l7cEQA9zLoi8tqM6b46aallaHQBrWHyerLj', function(error, authData) {
+		if (error) {
+			console.log("Login Failed to Firebase!", error);
+		}
+		else
+		{
 			ref.on("value", function(snapshot) {
 				$scope.messages = snapshot.val();
 				$scope.$evalAsync();
 				// Update the scroll area and tell the frosted glass to redraw itself
-			    $ionicFrostedDelegate.update();
-			    $ionicScrollDelegate.scrollBottom(true);
+				$ionicFrostedDelegate.update();
+				$ionicScrollDelegate.scrollBottom(true);
 				console.log($scope.messages);
 			}, function (errorObject) {
 				console.log("Error reading Chats: " + errorObject.code);
 			});
-  		}
-  	});
+		}
+	});
 	
 	// Send message
-	$scope.sendMessage = function (message, utc_timestamp) {
+	$scope.sendMessage = function(message, utc_timestamp) {
 		var message_obj = {
 			'content': message,
 			'timestamp': utc_timestamp,
@@ -146,8 +140,8 @@ angular.module('starter.controllers', [])
 		ref.push(message_obj);
 		
 		// Update the scroll area and tell the frosted glass to redraw itself
-	    $ionicFrostedDelegate.update();
-	    $ionicScrollDelegate.scrollBottom(true);
+		$ionicFrostedDelegate.update();
+		$ionicScrollDelegate.scrollBottom(true);
 		
 		// Locally store ongoing chats
 		var message_object_json = {
@@ -175,8 +169,26 @@ angular.module('starter.controllers', [])
 	$scope.contacts = ContactsService.getContacts();
 })
 
-.controller('ContactCtrl', function($scope, ContactsService, $stateParams) {
+.controller('ContactCtrl', function($scope, $state, ContactsService, $stateParams) {
 	$scope.contact = ContactsService.getContact($stateParams.contactId);
+	$scope.current_user_id = localStorage.getItem("current_user_id");
+	
+	// Init new one to one chat
+	$scope.initChat = function(contact) {
+		if ($scope.current_user_id > contact.id) {
+			chat_id = contact.id + "_" + $scope.current_user_id
+		} else {
+			chat_id = $scope.current_user_id + "_" + contact.id
+		}
+
+		// Set Current chat object
+		localStorage.setItem("current_chat_id", chat_id);
+		localStorage.setItem("current_chat_avatar", contact.avatar);
+		localStorage.setItem("current_chat_title", contact.username);
+		localStorage.setItem("current_chat_group", false);
+		// Render to chat page
+		$state.go("app.chat", {"chatId": chat_id});
+	}
 })
 
 

@@ -1,0 +1,13 @@
+	
+	// $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+	// 	console.log("State changed: ", toState);
+	// 	if (toState.url == "/chats") {
+	// 		// $scope.refreshItems();
+	// 		$scope.chats = JSON.parse(localStorage.getItem("ongoing_chats"));
+	// 		console.log('inside comdition', localStorage.getItem("ongoing_chats"));
+	// 	}
+	// })
+	
+	
+
+	// [{"id":"1","avatar":"http://ionicframework.com/img/docs/venkman.jpg","chat_title":"Rajib Chowdhury","last_message":"dsg sfsd sdgdfg","group":"false"},{"id":"2","avatar":"http://ionicframework.com/img/docs/venkman.jpg","chat_title":"Palash Sinha","last_message":"p","group":"false"},{"id":"3","avatar":"http://ionicframework.com/img/docs/venkman.jpg","chat_title":"2Palash Sinha","last_message":"p","group":"false"}]
