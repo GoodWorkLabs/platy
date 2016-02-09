@@ -1,13 +1,18 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', []).config(function ($httpProvider) {
+	$httpProvider.defaults.headers.put['Content-Type'] = 'application/json';
+	$httpProvider.defaults.headers.post['Content-Type'] =  'application/json';
+})
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $state, $ionicLoading) {
 
 	// With the new view caching in Ionic, Controllers are only called
 	// when they are recreated or on app start, instead of every page change.
 	// To listen for when this page is active (for example, to refresh data),
 	// listen for the $ionicView.enter event:
 	$scope.$on('$ionicView.enter', function(e) {
-		localStorage.setItem("current_user_id", 7);  
+		if (localStorage.getItem("current_user_token") == null) {
+			$scope.login();
+		}
 	});
 
 	// Form data for the login modal
@@ -36,27 +41,51 @@ angular.module('starter.controllers', [])
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
 		console.log('Doing login', $scope.loginData);
-
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		$timeout(function() {
+		console.log($scope.loginData);
+		// Show loader
+		$ionicLoading.show({ template: 'Authenticating...'});
+		
+		$http({
+			method: "POST",
+			url: "https://shrouded-stream-24547.herokuapp.com/api/v1/login",
+			data: $scope.loginData
+		}).then(function successCallback(response) {
+			localStorage.setItem("current_user_id", response.data.id);  
+			localStorage.setItem("current_user_token", response.data.token);  
+			localStorage.setItem("current_user_object", JSON.stringify(response.data));
+			
+			// Download contact list
+			$http({
+				method: "GET",
+				url: "https://shrouded-stream-24547.herokuapp.com/api/v1/users?token="+response.data.token
+			}).then(function successCallback(response) {
+				console.log(response.data);
+				localStorage.setItem("contacts_list", JSON.stringify(response.data));
+			}, function errorCallback(response) {
+				console.log('Error downloading user list.');
+				localStorage.removeItem("current_user_token");
+			});
+			
+			// Close login modal
 			$scope.closeLogin();
-		}, 1000);
+			$ionicLoading.hide();
+		}, function errorCallback(response) {
+			$ionicLoading.hide();
+			localStorage.removeItem("current_user_token");
+			alert('Invalid Credential.');
+		});
+	};
+	
+	$scope.logOut = function() {
+		localStorage.removeItem("current_user_token");
+		// Render to chats page
+		$state.go("app.chats");
 	};
 })
 
 .service('ContactsService', function($q) {
 	return {
-		contacts: [
-			{ id: 1, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Rajib', last_name: 'Chowdhury', username: 'Rajib Chowdhury', email: 'rajib@goodworklabs.com', phone: '9836157098'},
-			{ id: 2, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Palash', last_name: 'Sinha', username: 'Palash Sinha', email: 'palash@goodworklabs.com', phone: '9836157098'},
-			{ id: 3, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Bodhi', last_name: 'Bhattacharya', username: 'Bodhi Bhattacharya', email: 'bodhi@goodworklabs.com', phone: '9836157098'},
-			{ id: 4, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Madhumita', last_name: 'Chatterjee', username: 'Madhumita Chatterjee', email: 'madhumita@goodworklabs.com', phone: '9836157098'},
-			{ id: 5, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Paridhi', last_name: 'Gupta', username: 'Paridhi Gupta', email: 'paridhi@goodworklabs.com', phone: '9836157098'},
-			{ id: 6, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Tapash', last_name: 'Mullick', username: 'Tapash Mullick', email: 'tapash@goodworklabs.com', phone: '9836157098'},
-			{ id: 7, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Ujjal', last_name: 'Bhattacharya', username: 'Ujjal Bhattacharya', email: 'ujjal@goodworklabs.com', phone: '9836157098'},
-			{ id: 8, avatar: 'http://ionicframework.com/img/docs/venkman.jpg', first_name: 'Bimal', last_name: 'Singh', username: 'Bimal Singh', email: 'bimal@goodworklabs.com', phone: '9836157098'}
-		],
+		contacts: JSON.parse(localStorage.getItem("contacts_list")),
 		getContacts: function() {
 			return this.contacts
 		},

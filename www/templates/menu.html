@@ -18,7 +18,7 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ng-click="login()">
+        <ion-item menu-close ng-click="login()" ng-if='localStorage.getItem("current_user_token") != null'>
           Login
         </ion-item>
         <ion-item menu-close href="#/app/chats">
@@ -27,9 +27,9 @@
         <ion-item menu-close href="#/app/contacts">
           Contacts
         </ion-item>
-        <ion-item menu-close href="#/app/groups">
+        <!-- <ion-item menu-close href="#/app/groups">
           Groups
-        </ion-item>
+        </ion-item> -->
         <ion-item menu-close href="#/app/settings">
           Settings
         </ion-item>

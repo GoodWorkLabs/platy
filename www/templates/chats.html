@@ -2,11 +2,14 @@
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="chat in chats" href="#/app/chats/{{chat.id}}" class="item-avatar" ng-click="setCurrentChat(chat.id, 'http://ionicframework.com/img/docs/venkman.jpg', chat.chat_title, false)">
-	      <img src="http://ionicframework.com/img/docs/venkman.jpg">
+	      <img src={{chat.avatar}}>
 	      <h2>{{chat.chat_title}}</h2>
 	      <p>{{chat.last_message}}</p>
       </ion-item>
 		  <div ng-if="chats.length == 0" class="item item-divider">
+		    No recent Chats
+		  </div>
+		  <div ng-if="!chats" class="item item-divider">
 		    No recent Chats
 		  </div>
     </ion-list>
