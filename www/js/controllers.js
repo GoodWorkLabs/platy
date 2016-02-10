@@ -67,6 +67,7 @@ angular.module('starter.controllers', []).config(function ($httpProvider) {
 			});
 			
 			// Close login modal
+			$scope.loginData = $scope.initial;
 			$scope.closeLogin();
 			$ionicLoading.hide();
 		}, function errorCallback(response) {
