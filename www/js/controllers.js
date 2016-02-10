@@ -78,6 +78,8 @@ angular.module('starter.controllers', []).config(function ($httpProvider) {
 	
 	$scope.logOut = function() {
 		localStorage.removeItem("current_user_token");
+		localStorage.clear(); //Clear all local storage
+		
 		// Render to chats page
 		$state.go("app.chats");
 	};
